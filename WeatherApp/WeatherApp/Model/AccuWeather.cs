@@ -48,6 +48,106 @@ namespace WeatherApp.Model
         }
     }
 
+    public class DailyForecast : INotifyPropertyChanged
+    {
+        private string maximumTemperature;
+        public string MaximumTemperature
+        {
+            get { return maximumTemperature; }
+            set
+            {
+                maximumTemperature = value;
+                OnPropertyChanged("MaximumTemperature");
+            }
+        }
+
+        private string minimumTemperature;
+        public string MinimumTemperature
+        {
+            get { return minimumTemperature; }
+            set
+            {
+                minimumTemperature = value;
+                OnPropertyChanged("MinimumTemperature");
+            }
+        }
+
+        private string dayText;
+        public string DayText
+        {
+            get { return dayText; }
+            set
+            {
+                dayText = value;
+                OnPropertyChanged("DayText");
+            }
+        }
+
+        private string nightText;
+        public string NightText
+        {
+            get { return nightText; }
+            set
+            {
+                nightText = value;
+                OnPropertyChanged("NightText");
+            }
+        }
+
+        private Temperature temperature;
+        public Temperature Temperature
+        {
+            get
+            {
+                return temperature;
+            }
+
+            set
+            {
+                temperature = value;
+                OnPropertyChanged("Temperature");
+            }
+        }
+
+        private Day day;
+        public Day Day
+        {
+            get
+            {
+                return day;
+            }
+
+            set
+            {
+                day = value;
+                OnPropertyChanged("Day");
+            }
+        }
+
+        private Night night;
+        public Night Night
+        {
+            get
+            {
+                return night;
+            }
+
+            set
+            {
+                night = value;
+                OnPropertyChanged("Night");
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+
     public class Minimum : INotifyPropertyChanged
     {
         private float minValue;
@@ -223,62 +323,6 @@ namespace WeatherApp.Model
         }
     }
 
-    public class DailyForecast : INotifyPropertyChanged
-    {
-        private Temperature temperature;
-        public Temperature Temperature
-        {
-            get
-            {
-                return temperature;
-            }
-
-            set
-            {
-                temperature = value;
-                OnPropertyChanged("Temperature");
-            }
-        }
-
-        private Day day;
-        public Day Day
-        {
-            get
-            {
-                return day;
-            }
-
-            set
-            {
-                day = value;
-                OnPropertyChanged("Day");
-            }
-        }
-
-        private Night night;
-        public Night Night
-        {
-            get
-            {
-                return night;
-            }
-
-            set
-            {
-                night = value;
-                OnPropertyChanged("Night");
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void OnPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
-
     public class AccuWeather : INotifyPropertyChanged
     {
         private Headline headline;
@@ -311,45 +355,64 @@ namespace WeatherApp.Model
             }
         }
 
+        private DailyForecast dailyForecastDay1;
+        public DailyForecast DailyForecastDay1
+        {
+            get
+            {
+                return dailyForecastDay1;
+            }
+
+            set
+            {
+                dailyForecastDay1 = value;
+                OnPropertyChanged("DailyForecastDay1");
+            }
+        }
+
         public AccuWeather()
         {
-            if (DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
+            Headline = new Headline()
             {
-                Headline = new Headline()
+                EffectiveDate = DateTime.Now.AddDays(1),
+                ForecastText = "Sunny and clear"
+            };
+
+            DailyForecastDay1 = new DailyForecast()
+            {
+                MaximumTemperature = "75 °F",
+
+                MinimumTemperature = "60 °F",
+
+                DayText = "Sunny",
+
+                NightText = "Cool and clear",
+
+                Day = new Day()
                 {
-                    EffectiveDate = DateTime.Now.AddDays(1),
-                    ForecastText = "Sunny and clear"
-                };
+                    IconPhrase = "Sunny"
+                },
 
-                DailyForecasts = new DailyForecast[1];
-                DailyForecasts[0] = new DailyForecast()
+                Night = new Night()
                 {
-                    Day = new Day()
-                    {
-                        IconPhrase = "Sunny"
-                    },
+                    IconPhrase = "Cool and clear"
+                },
 
-                    Night = new Night()
+                Temperature = new Temperature()
+                {
+                    Maximum = new Maximum()
                     {
-                        IconPhrase = "Cool and clear"
-                    },
-
-                    Temperature = new Temperature()
-                    {
-                        Maximum = new Maximum()
-                        {
-                             Value = 75,
-                             Unit = "F"
-                        },
-                            
-                        Minimum = new Minimum()
-                        {
-                            Value = 60,
+                            Value = 75,
                             Unit = "F"
-                        }
+                    },
+                            
+                    Minimum = new Minimum()
+                    {
+                        Value = 60,
+                        Unit = "F"
                     }
-                };
-            }
+                }
+            };
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

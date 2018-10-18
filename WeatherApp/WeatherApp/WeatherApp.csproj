@@ -58,6 +58,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\City.cs" />
+    <Compile Include="ViewModel\Commands\RefreshCommand.cs" />
     <Compile Include="ViewModel\WeatherAPI.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>

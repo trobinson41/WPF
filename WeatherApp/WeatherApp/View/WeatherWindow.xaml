@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WeatherApp.View"
         xmlns:vm="clr-namespace:WeatherApp.ViewModel"
         mc:Ignorable="d"
-        Title="WeatherWindow" Height="480" Width="270">
+        Title="WeatherWindow" Height="541.6" Width="270">
 
     <Window.Resources>
         <Style TargetType="TextBlock">
@@ -14,11 +14,16 @@
         </Style>
         <vm:WeatherVM x:Key="vm"/>
     </Window.Resources>
-    <Grid DataContext="{StaticResource vm}">
-        <StackPanel Margin="10"
+    <Grid DataContext="{StaticResource vm}" Margin="0,0,0,11.6">
+        <StackPanel Margin="10,10,10,0.4"
                     DataContext="{Binding Weather}">
+            <Button Content="Refresh" 
+                    Command="{Binding Source={StaticResource vm}, Path=RefreshCommand}"
+                    Margin="0 0 0 10"/>
             <TextBox Text="{Binding Source={StaticResource vm}, Path=Query, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <ListView Height="100" ItemsSource="{Binding Source={StaticResource vm}, Path=Cities}">
+            <ListView Height="100"
+                      SelectedItem="{Binding Source={StaticResource vm}, Path=SelectedResult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      ItemsSource="{Binding Source={StaticResource vm}, Path=Cities}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding DisplayLabel}"/>
@@ -33,21 +38,21 @@
                        Margin="0 20 0 0"
                        FontSize="20"
                        FontWeight="Bold"/>
-            <TextBlock Text="{Binding DailyForecast.Temperature.Maximum}"
+            <TextBlock Text="{Binding DailyForecastDay1.MaximumTemperature}"
                        FontSize="40"
                        FontWeight="ExtraBold"
                        Margin="0 30 0 0"/>
-            <TextBlock Text="{Binding DailyForecast.Temperature.Minimum}"
+            <TextBlock Text="{Binding DailyForecastDay1.MinimumTemperature}"
                        FontSize="40"
                        FontWeight="ExtraBold"
                        Margin="0 30 0 0"/>
             <TextBlock Text="{Binding Headline.ForecastText}"
                        FontSize="15"
                        FontWeight="DemiBold"/>
-            <TextBlock Text="{Binding DailyForecast.Day.IconPhrase}"
+            <TextBlock Text="{Binding DailyForecastDay1.DayText}"
                        FontSize="15"
-                       FontWeight="Normal"/>
-            <TextBlock Text="{Binding DailyForecast.Night.IconPhrase}"
+                       FontWeight="Normal" Height="20"/>
+            <TextBlock Text="{Binding DailyForecastDay1.NightText}"
                        FontSize="15"
                        FontWeight="Normal"/>
         </StackPanel>

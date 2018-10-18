@@ -19,16 +19,28 @@ namespace WeatherApp.ViewModel
         {
             AccuWeather result = new AccuWeather();
 
-            //string locationCode = "347628";
-
-            string url = "/forecasts/v1/daily/1day/" + locationCode +"?apikey=" + API_KEY;
-
-            using (HttpClient client = new HttpClient())
+            if (locationCode != "")
             {
-                client.BaseAddress = new Uri(BASE_URL);
-                var response = await client.GetAsync(url);
-                var json = await response.Content.ReadAsStringAsync();
-                result = JsonConvert.DeserializeObject<AccuWeather>(json);
+                //string locationCode = "347628";
+
+                string url = "/forecasts/v1/daily/1day/" + locationCode + "?apikey=" + API_KEY;
+
+                using (HttpClient client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(BASE_URL);
+                    var response = await client.GetAsync(url);
+                    var json = await response.Content.ReadAsStringAsync();
+                    result = JsonConvert.DeserializeObject<AccuWeather>(json);
+                    result.DailyForecastDay1.MaximumTemperature = result.DailyForecasts[0].Temperature.Maximum.Value.ToString() + " °" + result.DailyForecasts[0].Temperature.Maximum.Unit;
+                    result.DailyForecastDay1.MinimumTemperature = result.DailyForecasts[0].Temperature.Minimum.Value.ToString() + " °" + result.DailyForecasts[0].Temperature.Minimum.Unit;
+                    result.DailyForecastDay1.DayText = result.DailyForecastDay1.Day.IconPhrase;
+                    result.DailyForecastDay1.NightText = result.DailyForecastDay1.Night.IconPhrase;
+                }
+            }
+            else
+            {
+                result.DailyForecastDay1.Temperature.Minimum.Value = 0;
+                result.DailyForecastDay1.Temperature.Maximum.Value = 0;
             }
 
             return result;
@@ -61,8 +73,8 @@ namespace WeatherApp.ViewModel
             {
                 citiesForList.Add(new CityForList()
                 {
-                    DisplayLabel = city.LocalizedName + ", " + city.AdministrativeArea.LocalizedName + ", " + city.Country.LocalizedName
-
+                    DisplayLabel = city.LocalizedName + ", " + city.AdministrativeArea.LocalizedName + ", " + city.Country.LocalizedName,
+                    LocationCode = city.Key
                 });
             }
 
